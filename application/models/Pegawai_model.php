@@ -33,8 +33,7 @@ class Pegawai_model extends CI_Model{
 
     //cek username dan password owner
     function auth_owner($username,$password){
-        $query=$this->db->query("SELECT * FROM pegawai WHERE `username`='$username' AND `password`='$password' AND `role`='OWNER'")->result_array();
-        return $query;
+        return $this->db->get_where('pegawai', ['username' => $username , 'password' => $password]) ->result_array();
     }
  
     //cek username dan password cs
