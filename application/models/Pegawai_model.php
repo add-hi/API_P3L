@@ -29,18 +29,25 @@ class Pegawai_model extends CI_Model{
 
     // BUAT LOGIN
 
-    
+  
+    public function login($table,$username)
+    {
+        return $this->db->get_where($table,$username)->result_array();
+    }
 
-    //cek username dan password owner
-    public function auth_owner($username){
-        return $this->db->get_where('pegawai', ['username' => $username ]) ->result_array();
-    }
+
+
+
+    // //cek username dan password owner
+    // public function auth_owner($username){
+    //     return $this->db->get_where('pegawai', ['username' => $username ]) ->result_array();
+    // }
  
-    //cek username dan password cs
-    public function auth_cs($username,$password){
-        $query=$this->db->query("SELECT * FROM pegawai WHERE `username`='$username' AND `password`='$password' AND `role`='CS'")->result_array();
-        return $query;
-    }
+    // //cek username dan password cs
+    // public function auth_cs($username,$password){
+    //     $query=$this->db->query("SELECT * FROM pegawai WHERE `username`='$username' AND `password`='$password' AND `role`='CS'")->result_array();
+    //     return $query;
+    // }
 
 
 
