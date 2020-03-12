@@ -33,7 +33,9 @@ class Pegawai_model extends CI_Model{
         if($username === null || $password === null){
             return $this->db->get('pegawai')->result_array();
         } else{
-            return $this->db->get_where('pegawai', ['username' => $username], ['password' => $password]) ->result_array();
+            if($this->db->get_where('pegawai', ['username' => $username])>0 || $this->db->get_where('pegawai', ['password' => $password])>0){
+                return $this->db->get_where('pegawai', ['username' => $username]) ->result_array();
+            }
         }
         
     }
