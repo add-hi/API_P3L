@@ -18,13 +18,8 @@ class Login extends REST_Controller
 
 		$username = $this->get('username');
 		$password = $this->get('password');
-        $where = array(
-			'username' => $username,
-			'password' => $password,
-			'role' => 'OWNER'
-			);
 		
-		$pegawai = $this->pegawai->login($where);
+		$pegawai = $this->pegawai->login($username,$password);
 
 		if($pegawai){
             $this->response([
