@@ -18,50 +18,26 @@ class Login extends REST_Controller
 
 		$username = $this->get('username');
 		$password = $this->get('password');
-        $owner = array(
+        $where = array(
 			'username' => $username,
 			'password' => $password,
-			'role' => 'OWNER'
+			'role' => 'OWNER' || 'CS'
 			);
 		
-		$cs = array(
-			'username' => $username,
-			'password' => $password,
-			'role' => 'CS'
-			);
+		$pegawai = $this->pegawai->login($where);
 
-		
-		$pegawai = $this->pegawai->login_owner($owner);
-		if($pegawai->num_rows() > 0){
-			if($pegawai){
-				$this->response([
-					'status' => TRUE,
-					'message' => 'Loggin Berhasil!',
-					'data' => $pegawai
-				], REST_Controller::HTTP_OK); 
-			} else {
-				$this->response([
-					'status' => false,
-					'message' => 'Gagal Login OWNER !'
-				], REST_Controller::HTTP_BAD_GATEWAY); 
-			}
-		}else{
-			$pegawai = $this->pegawai->login_cs($cs);
-
-			if($pegawai){
-				$this->response([
-					'status' => TRUE,
-					'message' => 'Loggin Berhasil!',
-					'data' => $pegawai
-				], REST_Controller::HTTP_OK); 
-			} else {
-				$this->response([
-					'status' => false,
-					'message' => 'Gagal Login CS ! '
-				], REST_Controller::HTTP_BAD_GATEWAY); 
-			}
-		}
-		
+		if($pegawai){
+            $this->response([
+				'status' => TRUE,
+				'message' => 'Loggin Berhasil!',
+                'data' => $pegawai
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+				'status' => false,
+                'message' => 'Gagal Login ! id tidak ditemukan! --HANYA OWNER ATAU CS!--'
+            ], REST_Controller::HTTP_BAD_GATEWAY); 
+        }
 
 		// if($cek > 0){
  
