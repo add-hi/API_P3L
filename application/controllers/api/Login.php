@@ -18,7 +18,7 @@ class Login extends REST_Controller
 		$password = $this->get('password');
 		
 		//$pegawai = $this->pegawai->login($username,$password);
-		$data=$this->pegawai->auth_owner($username,$password);
+		$data=$this->pegawai->auth_owner($username);
 		$this->response([
 			'status' => TRUE,
 			'message' => 'login owner sukses!',
