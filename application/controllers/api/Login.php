@@ -22,7 +22,7 @@ class Login extends REST_Controller
 			'username' => $username,
 			'password' => $password
 			);
-		$cek = $this->m_login->cek_login($where)->num_rows();
+		$cek = $this->pegawai->cek_login($where)->num_rows();
 		if($cek > 0){
 
 			$data_session = array(
