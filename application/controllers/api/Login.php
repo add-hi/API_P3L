@@ -13,11 +13,11 @@ class Login extends REST_Controller
         $this->load->model('Pegawai_model' , 'pegawai');
     }
 
-    public function index_post()
+    public function index_get()
     {
 
-        $username = $this->post('username');
-        $password = $this->post('password');
+        $username = $this->get('username');
+        $password = $this->get('password');
         $where = array(
             'username' => $username
             );
