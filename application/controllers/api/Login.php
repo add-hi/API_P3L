@@ -19,11 +19,10 @@ class Login extends REST_Controller
 		
 		//$pegawai = $this->pegawai->login($username,$password);
 		$cek_owner=$this->pegawai->auth_owner($username,$password);
-		$data=$cek_owner->row_array();
 		$this->response([
 			'status' => TRUE,
 			'message' => 'login owner sukses!',
-			'data' => $data
+			'data' => $cek_owner
 		], REST_Controller::HTTP_OK); 
 		
 		// if($cek_owner->num_rows() > 0){ //jika login sebagai dosen
