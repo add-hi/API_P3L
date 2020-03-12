@@ -27,14 +27,16 @@ class Login extends REST_Controller
 
 		if($pegawai){
             $this->response([
-                'status' => TRUE,
+				'status' => TRUE,
+				'message' => 'Loggin Berhasil!',
                 'data' => $pegawai
             ], REST_Controller::HTTP_OK); 
         } else {
             $this->response([
-                'status' => false,
+				'status' => false,
+				'message' => 'Gagal!',
                 'message' => 'id tidak ditemukan!'
-            ], REST_Controller::HTTP_NOT_FOUND); 
+            ], REST_Controller::HTTP_BAD_GATEWAY); 
         }
 
 		// if($cek > 0){
