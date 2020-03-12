@@ -20,10 +20,10 @@ class Login extends REST_Controller
 		$password = $this->get('password');
 		
 		$pegawai = $this->pegawai->login($username,$password,"OWNER");
-		$message = "Login sebagai owner";
+		$message = "OWNER";
 		if(count($pegawai) < 1){
 			$pegawai = $this->pegawai->login($username,$password,"CS");
-			$message = "Login sebagai cs";
+			$message = "CS";
 		}
 
 		if($pegawai){
