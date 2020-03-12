@@ -16,8 +16,8 @@ class Login extends REST_Controller
     public function index_post()
     {
 
-		$username = $this->input->post('username');
-		$password = $this->input->post('password');
+		$username = $this->post('username');
+		$password = $this->post('password');
         $where = array(
 			'username' => $username,
 			'password' => $password
