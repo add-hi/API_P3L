@@ -31,10 +31,7 @@ class Pegawai_model extends CI_Model{
 
     public function login($username = null, $password = null){
         if($username === null || $password === null){
-            return $this->response([
-                'status' => false,
-                'message' => 'id tidak ditemukan!'
-            ], REST_Controller::HTTP_NOT_FOUND); 
+            return $this->db->get('pegawai')->result_array();
         } else{
             return $this->db->get_where('pegawai', ['username' => $username], ['password' => $password]) ->result_array();
         }
