@@ -13,22 +13,27 @@ class Login extends REST_Controller
         $this->load->model('Pegawai_model' , 'pegawai');
     }
 
-    // FITUR LOGIN , COBA PERUBAHAN
-    public function login()
+    // FITUR LOGIN 
+    public function index()
     {
-		$username = $this->post('username');
-		$password = $this->post('password');
+		$username = $this->input->post('username');
+		$password = $this->input->post('password');
 		$where = array(
 			'username' => $username,
 			'password' => $password
 			);
-		$cek = $this->pegawai->cek_login($where)->num_rows();
+		$cek = $this->pegawai->cek_login('pegawai',$where)->num_rows();
 		if($cek > 0){
 
-			$data_session = array(
+				$data_session = array(
 				'nama' => $username,
 				'status' => "login"
 				);
+
+				$this->response([
+					'status' => TRUE,
+					'message' => 'Login Berhasil!'
+				], REST_Controller::HTTP_OK); 
 
 			$this->session->set_userdata($data_session);
 
