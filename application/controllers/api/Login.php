@@ -21,7 +21,7 @@ class Login extends REST_Controller
         $where = array(
 			'username' => $username,
 			'password' => $password,
-			'role' => 'OWNER' || 'CS'
+			'role' => 'OWNER'
 			);
 		
 		$pegawai = $this->pegawai->login($where);
