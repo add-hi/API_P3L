@@ -15,7 +15,6 @@ class Login extends REST_Controller
 
     public function index_get()
     {
-        $this->load->library("form_validation");
 
         $username = $this->get('username');
         $password = $this->get('password');
