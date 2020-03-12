@@ -21,7 +21,10 @@ class Login extends REST_Controller
         $where = array(
             'username' => $username
             );
-        $result = $this->pegawai->login("pegawai",$where);
+		$result = $this->pegawai->login("pegawai",$where);
+		$this->response([
+			'status' => "true",
+		], REST_Controller::HTTP_OK);
         foreach($result as $row){
             if(password_verify($password,$row['password'])){
 				
