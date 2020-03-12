@@ -29,16 +29,33 @@ class Pegawai_model extends CI_Model{
 
     // BUAT LOGIN
 
-    public function login($username = null, $password = null){
-        if($username === null || $password === null){
-            return $this->db->get('pegawai')->result_array();
-        } else{
-            if($this->db->get_where('pegawai', ['username' => $username])>0 && $this->db->get_where('pegawai', ['password' => $password])>0){
-                return $this->db->get_where('pegawai', ['username' => $username]) ->result_array();
-            }
-        }
-        
+    
+
+    //cek username dan password owner
+    function auth_owner($username,$password){
+        $query=$this->db->query("SELECT * FROM pegawai WHERE `username`='$username' AND `password`='$password' AND `role`='OWNER' LIMIT 1");
+        return $query;
     }
+ 
+    //cek username dan password cs
+    function auth_cs($username,$password){
+        $query=$this->db->query("SELECT * FROM pegawai WHERE `username`='$username' AND `password`='$password' AND `role`='CS' LIMIT 1");
+        return $query;
+    }
+
+
+
+    
+        // if($username === null || $password === null){
+        //     return $this->db->get('pegawai')->result_array();
+        // } else{
+        //     if($this->db->get_where('pegawai', ['username' => $username])>0 && $this->db->get_where('pegawai', ['password' => $password])>0){
+        //         return $this->db->get_where('pegawai', ['username' => $username]) ->result_array();
+        //     }
+        // }
+    
+    // public function login($username, $password){
+    // }
     
 }
 
