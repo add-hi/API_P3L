@@ -13,42 +13,27 @@ class Login extends REST_Controller
         $this->load->model('Pegawai_model' , 'pegawai');
     }
 
-    // FITUR LOGIN 
-    public function index()
-    {
-		$username = $this->input->post('username');
-		$password = $this->input->post('password');
-		$where = array(
-			'username' => $username,
-			'password' => $password
-			);
-		$cek = $this->pegawai->cek_login('pegawai',$where)->num_rows();
-		if($cek > 0){
+    public function index_get(){
+        $id_pegawai = $this->get('id_pegawai');
 
-				$data_session = array(
-				'nama' => $username,
-				'status' => "login"
-				);
-
-				$this->response([
-					'status' => TRUE,
-					'message' => 'Login Berhasil!'
-				], REST_Controller::HTTP_OK); 
-
-			$this->session->set_userdata($data_session);
-
-			// redirect(base_url("admin"));
-
-		}else{
-			echo "Username dan password salah !";
-		}
-    }
-
-    public function logout()
-    {
-        // hancurkan semua sesi
-        $this->session->sess_destroy();
-        //redirect(site_url('admin/login'));
+        if($id_pegawai === null)
+        {
+            $pegawai = $this->pegawai->getPegawai();
+        } else{
+            $pegawai = $this->pegawai->getPegawai($id_pegawai);
+        }
+        
+        if($pegawai){
+            $this->response([
+                'status' => TRUE,
+                'data' => $pegawai
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
     }
 
 }
