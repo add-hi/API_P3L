@@ -17,15 +17,7 @@ class Login extends REST_Controller
 		$username = $this->get('username');
 		$password = $this->get('password');
 		
-		if($pegawai === null || $password === null){
-            $this->response([
-                'status' => FALSE,
-                'message' => 'Harap masukkan password dan username!'
-            ], REST_Controller::HTTP_OK); 
-        }else{
-			$pegawai = $this->pegawai->login($username,$password);
-		}
-		
+		$pegawai = $this->pegawai->login($username,$password);
         
         if($pegawai){
             $this->response([
