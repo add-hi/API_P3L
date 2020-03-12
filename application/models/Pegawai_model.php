@@ -30,11 +30,15 @@ class Pegawai_model extends CI_Model{
     // BUAT LOGIN
 
   
-    public function login($where)
+    public function login_owner($where)
     {
         return $this->db->get_where('pegawai',$where) ->result_array();
     }
 
+    public function login_cs($where)
+    {
+        return $this->db->get_where('pegawai',$where) ->result_array();
+    }
 
 
 

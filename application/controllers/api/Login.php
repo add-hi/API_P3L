@@ -18,13 +18,20 @@ class Login extends REST_Controller
 
 		$username = $this->get('username');
 		$password = $this->get('password');
-        $where = array(
+        $owner = array(
 			'username' => $username,
 			'password' => $password,
 			'role' => 'OWNER'
 			);
 		
-		$pegawai = $this->pegawai->login($where);
+		$cs = array(
+			'username' => $username,
+			'password' => $password,
+			'role' => 'CS'
+			);
+
+		$pegawai = $this->pegawai->login_owner($owner);
+		$pegawai = $this->pegawai->login_cs($cs);
 
 		if($pegawai){
             $this->response([
@@ -35,7 +42,7 @@ class Login extends REST_Controller
         } else {
             $this->response([
 				'status' => false,
-                'message' => 'Gagal Login ! id tidak ditemukan!'
+                'message' => 'Gagal Login ! id tidak ditemukan! --HANYA OWNER ATAU CS!--'
             ], REST_Controller::HTTP_BAD_GATEWAY); 
         }
 
