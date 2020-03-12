@@ -32,7 +32,7 @@ class Pegawai_model extends CI_Model{
   
     public function login($username, $password)
     {
-        return $this->db->query("SELECT * from `pegawai` WHERE username = $username AND `password` = $password AND `role` ='OWNER' ")->result_array();
+        return $this->db->query("SELECT * from `pegawai` WHERE username = $username AND 'password' = $password AND 'role' ='OWNER' ")->result_array();
         // get_where('pegawai',$where) ->result_array();
     }
 
