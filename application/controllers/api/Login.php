@@ -14,9 +14,10 @@ class Login extends REST_Controller
     }
 
     public function index_get(){
-        $username = $this->get('username');
+		$username = $this->get('username');
+		$password = $this->get('password');
 
-		$pegawai = $this->pegawai->login($username);
+		$pegawai = $this->pegawai->login($username,$password);
         
         if($pegawai){
             $this->response([

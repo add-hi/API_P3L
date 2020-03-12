@@ -29,11 +29,11 @@ class Pegawai_model extends CI_Model{
 
     // BUAT LOGIN
 
-    public function login($username = null){
-        if($username === null){
+    public function login($username = null, $password = null){
+        if($username === null || $password === null){
             return $this->db->get('pegawai')->result_array();
         } else{
-            return $this->db->get_where('pegawai', ['username' => $username]) ->result_array();
+            return $this->db->get_where('pegawai', ['username' => $username], ['password' => $password]) ->result_array();
         }
         
     }
