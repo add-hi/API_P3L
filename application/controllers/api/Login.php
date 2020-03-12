@@ -16,13 +16,13 @@ class Login extends REST_Controller
     // FITUR LOGIN , COBA PERUBAHAN
     public function login()
     {
-		$username = $this->input->post('username');
-		$password = $this->input->post('password');
+		$username = $this->post('username');
+		$password = $this->post('password');
 		$where = array(
 			'username' => $username,
 			'password' => $password
 			);
-		$cek = $this->m_login->cek_login("pegawai",$where)->num_rows();
+		$cek = $this->m_login->cek_login($where)->num_rows();
 		if($cek > 0){
 
 			$data_session = array(
