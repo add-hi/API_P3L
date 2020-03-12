@@ -23,31 +23,43 @@ class Login extends REST_Controller
 			'password' => $password
 			);
 		
-		$cek = $this->pegawai->login("pegawai",$where)->num_rows();
+		$pegawai = $this->pegawai->login($where);
 
-		if($cek > 0){
+		if($pegawai){
+            $this->response([
+                'status' => TRUE,
+                'data' => $pegawai
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+
+		// if($cek > 0){
  
-			$data_session = array(
-				'nama' => $username,
-				'status' => "login"
-				);
-			$this->response([
-				'status' => TRUE,
-				'message' => 'Berhasil Loggin!'
-			], REST_Controller::HTTP_OK);
+		// 	$data_session = array(
+		// 		'nama' => $username,
+		// 		'status' => "login"
+		// 		);
+		// 	$this->response([
+		// 		'status' => TRUE,
+		// 		'message' => 'Berhasil Loggin!'
+		// 	], REST_Controller::HTTP_OK);
 			
-			$this->session->set_userdata($data_session);
+		// 	$this->session->set_userdata($data_session);
  
-			redirect(base_url("admin"));
+		// 	redirect(base_url("admin"));
  
-		}else{
-			$this->response([
-				'status' => FALSE,
-				'message' => 'GAGAL Loggin!'
-			], REST_Controller::HTTP_BAD_REQUEST);
+		// }else{
+		// 	$this->response([
+		// 		'status' => FALSE,
+		// 		'message' => 'GAGAL Loggin!'
+		// 	], REST_Controller::HTTP_BAD_REQUEST);
 
-			echo "Username dan password salah !";
-		}
+		// 	echo "Username dan password salah !";
+		// }
         // foreach($result as $row){
         //     if(password_verify($password,$row['password'])){
 				
