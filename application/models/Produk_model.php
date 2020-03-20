@@ -11,8 +11,14 @@ class Produk_model extends CI_Model{
         
     }
 
-    public function deleteProduk($id_produk){
-        $this->db->delete('produk' , ['id_produk' => $id_produk]);
+    public function deleteProduk($data, $id)
+    {
+        $this->db->update('produk', $data, ['id_produk' => $id]);
+        return $this->db->affected_rows();
+    }
+
+    public function hardDelete($id){
+        $this->db->delete('produk' , ['id_produk' => $id]);
         return $this->db->affected_rows();
     }
 

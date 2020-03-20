@@ -11,7 +11,12 @@ class Supplier_model extends CI_Model{
         
     }
 
-    public function deleteSupplier($id_supplier){
+    public function deleteSupplier($data,$id_supplier){
+        $this->db->update('supplier' , $data , ['id_supplier' => $id_supplier]);
+        return $this->db->affected_rows();
+    }
+
+    public function hardDelete($id_supplier){
         $this->db->delete('supplier' , ['id_supplier' => $id_supplier]);
         return $this->db->affected_rows();
     }

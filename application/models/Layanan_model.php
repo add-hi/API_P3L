@@ -11,7 +11,12 @@ class Layanan_model extends CI_Model{
         
     }
 
-    public function deleteLayanan($id_layanan){
+    public function deleteLayanan($data,$id_layanan){
+        $this->db->update('layanan' , $data , ['id_layanan' => $id_layanan]);
+        return $this->db->affected_rows();
+    }
+
+    public function hardDelete($id_layanan){
         $this->db->delete('layanan' , ['id_layanan' => $id_layanan]);
         return $this->db->affected_rows();
     }

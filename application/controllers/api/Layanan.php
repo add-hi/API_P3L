@@ -36,6 +36,41 @@ class Layanan extends REST_Controller
         }
     }
 
+    public function delete_post(){
+        $id = $this->post('id_layanan');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('layanan',['id_layanan'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->layanan->deleteLayanan($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'gagal soft delete'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'data sudah di soft delete sebelumnya'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+  
+      }
+
     public function index_delete(){
         $id_layanan = $this->delete('id_layanan');
 
@@ -45,7 +80,7 @@ class Layanan extends REST_Controller
                 'message' => 'id layanan yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->layanan->deleteLayanan($id_layanan) > 0){
+            if( $this->layanan->hardDelete($id_layanan) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,

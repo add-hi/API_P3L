@@ -36,20 +36,55 @@ class Produk extends REST_Controller
         }
     }
 
-    public function index_delete(){
-        $id_produk = $this->delete('id_produk');
+    public function delete_post(){
+      $id = $this->post('id_produk');
+      $data = [
+        'delete_at' => date('Y-m-d H:i:s')
+      ];
 
-        if($id_produk === null){
+      $query = $this->db->get_where('produk',['id_produk'=> $id]);
+
+    foreach ($query->result() as $row)
+    {
+        $cek = $row->delete_at;
+    }
+
+      if($cek === null){
+        if($this->produk->deleteProduk($data, $id) > 0) {
+            $this->response([
+              'status' => true,
+              'id' => $id,
+              'message' => 'berhasil soft delete :)'
+            ],  REST_Controller::HTTP_OK);
+          } else {
+            $this->response([
+              'status' => false,
+              'message' => 'gagal soft delete'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+          }
+      }else{
+        $this->response([
+            'status' => false,
+            'message' => 'data sudah di delete sebelumnya'
+          ], REST_Controller::HTTP_BAD_REQUEST);
+      }
+
+    }
+
+    public function index_delete(){
+        $id = $this->delete('id_produk');
+
+        if($id === null){
             $this->response([
                 'status' => false,
                 'message' => 'id produk yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->produk->deleteProduk($id_produk) > 0){
+            if( $this->produk->hardDelete($id) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,
-                    'id_produk' => $id_produk,
+                    'id_produk' => $id,
                     'message' => 'produk sudah terhapus!'
                 ], REST_Controller::HTTP_OK); 
             } else{
@@ -110,4 +145,22 @@ class Produk extends REST_Controller
         }
 
     }
+
+    private function image_upload()
+	{
+		$config['upload_path']          = './upload/produk/';
+		$config['allowed_types']        = 'gif|jpg|png|JPG|PNG|jpeg';
+        $config['encrypt_name']			= TRUE;
+
+		$this->load->library('upload', $config);
+
+		if ($this->upload->do_upload("foto")) {
+            $data = array('upload_data' => $this->upload->data());
+			return $data['upload_data']['file_name']; 
+        }
+        else{
+            return NULL;
+        }
+		print_r($this->upload->display_errors());
+	}
 }
