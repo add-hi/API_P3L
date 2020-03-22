@@ -36,6 +36,29 @@ class Produk extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id_produk = $this->get('id_produk');
+
+        if($id_produk === null)
+        {
+            $produk = $this->produk->getLogProduk();
+        } else{
+            $produk = $this->produk->getProduk($id_produk);
+        }
+        
+        if($produk){
+            $this->response([
+                'status' => TRUE,
+                'data' => $produk
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
     public function delete_post(){
       $id = $this->post('id_produk');
       $data = [
