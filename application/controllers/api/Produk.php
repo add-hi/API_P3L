@@ -59,13 +59,13 @@ class Produk extends REST_Controller
           } else {
             $this->response([
               'status' => false,
-              'message' => 'gagal soft delete'
+              'message' => 'deleted'
             ], REST_Controller::HTTP_BAD_REQUEST);
           }
       }else{
         $this->response([
             'status' => false,
-            'message' => 'data sudah di delete sebelumnya'
+            'message' => 'deleted'
           ], REST_Controller::HTTP_BAD_REQUEST);
       }
 
