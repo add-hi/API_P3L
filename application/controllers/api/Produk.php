@@ -208,7 +208,8 @@ class Produk extends REST_Controller
     private function image_upload($id)
 	{
 		$config['upload_path']          = './upload/produk/';
-		$config['allowed_types']        = 'gif|jpg|png|JPG|PNG|jpeg';
+        $config['allowed_types']        = 'gif|jpg|png|JPG|PNG|jpeg';
+        $config['file_name']            = $this->$id;
         $config['encrypt_name']			= TRUE;
         $config['overwrite']			= TRUE;
 
