@@ -11,6 +11,7 @@ class Produk extends REST_Controller
     public function __construct(){
         parent::__construct();
         $this->load->model('Produk_model' , 'produk');
+        
     }
 
     public function index_get(){
@@ -96,6 +97,9 @@ class Produk extends REST_Controller
 
     public function index_delete(){
         $id = $this->delete('id_produk');
+        $data = [
+            'foto' => $this->_deleteImage($id)
+        ];
 
         if($id === null){
             $this->response([
@@ -106,13 +110,13 @@ class Produk extends REST_Controller
             if( $this->produk->hardDelete($id) > 0){
                 //OKE
                 $this->response([
-                    'status' => FALSE,
+                    'status' => true,
                     'id_produk' => $id,
                     'message' => 'produk sudah terhapus!'
                 ], REST_Controller::HTTP_OK); 
             } else{
                 $this->response([
-                    'status' => false,  
+                    'status' => true,  
                     'message' => 'id tidak ditemukan!'
                 ], REST_Controller::HTTP_NOT_FOUND); 
             }
@@ -125,8 +129,7 @@ class Produk extends REST_Controller
             'unit' => $this->post('unit'),
             'stok' => $this->post('stok'),
             'min_stok' => $this->post('min_stok'),
-            'harga' => $this->post('harga'),
-            'foto' => $this->post('foto')
+            'harga' => $this->post('harga')
         ];
 
         if($this->produk->createProduk($data) > 0){
@@ -151,8 +154,7 @@ class Produk extends REST_Controller
             'unit' => $this->put('unit'),
             'stok' => $this->put('stok'),
             'min_stok' => $this->put('min_stok'),
-            'harga' => $this->put('harga'),
-            'foto' => $this->put('foto')
+            'harga' => $this->put('harga')
         ];
 
         if($this->produk->updateProduk($data,$id_produk) > 0){
@@ -169,14 +171,55 @@ class Produk extends REST_Controller
 
     }
 
-    private function image_upload()
+    public function foto_post(){
+        $id_produk = $this->post('id_produk');
+        $data = [
+            'foto' => $this->image_upload($id_produk)
+        ];
+  
+        $query = $this->db->get_where('produk',['id_produk'=> $id_produk]);
+  
+        foreach ($query->result() as $row)
+        {
+            $cek = $row->foto;
+        }
+  
+        if($cek != null){
+            if($this->produk->fotoProduk($data,$id_produk) > 0){
+                $this->response([
+                    'status' => true,
+                    'message' => 'foto sudah terupdate!'
+                ], REST_Controller::HTTP_OK); 
+            }else {
+                $this->response([
+                    'status' => false,  
+                    'message' => 'Gagal update fot produk!'
+                ], REST_Controller::HTTP_BAD_REQUEST); 
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'Foto null!'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+  
+      }
+
+    private function image_upload($id)
 	{
 		$config['upload_path']          = './upload/produk/';
 		$config['allowed_types']        = 'gif|jpg|png|JPG|PNG|jpeg';
         $config['encrypt_name']			= TRUE;
+        $config['overwrite']			= TRUE;
 
 		$this->load->library('upload', $config);
-
+        
+        $this->db->get_where('produk',['id_produk'=> $id]);
+        //CEK JIKA SUDAH ADA FOTO , JIKA SUDAH ADA MAKA AKAN DI DELETE DULU 
+        $data = [
+            'foto' => $this->_deleteImage($id)
+        ];
+        //KASIH FOTO BARU (UPDATE)
 		if ($this->upload->do_upload("foto")) {
             $data = array('upload_data' => $this->upload->data());
 			return $data['upload_data']['file_name']; 
@@ -185,5 +228,24 @@ class Produk extends REST_Controller
             return NULL;
         }
 		print_r($this->upload->display_errors());
-	}
+    }
+
+    private function _deleteImage($id)
+    {
+        $query = $this->db->get_where('produk',['id_produk'=> $id]);
+
+        foreach ($query->result() as $row)
+        {
+            $cek = $row->foto;
+        }
+
+        if ($cek != "default.jpg") {
+            $filename = explode(".", $cek)[0];
+            return array_map('unlink', glob(FCPATH."upload/produk/$filename.*"));
+        }
+    }
+
 }
+
+// SAYA UCAPKAN TRIMA KASIH PADA TUHAN YANG MAHA ESA
+// DAN SAMA CEWEKKU NIKEN YANG UDH SUPPORT SELAMA SETRESS PENGERJAAN CODINGNYA 

@@ -19,7 +19,6 @@ class Produk_model extends CI_Model{
         } else{
             return $this->db->get_where('produk', ['id_produk' => $id_produk]) ->result_array();
         }
-        
     }
 
     public function deleteProduk($data, $id)
@@ -42,4 +41,13 @@ class Produk_model extends CI_Model{
         $this->db->update('produk' , $data , ['id_produk' => $id_produk]);
         return $this->db->affected_rows();
     }
+
+    //upload foto
+
+    public function fotoProduk($data, $id)
+    {
+        $this->db->update('produk', $data, ['id_produk' => $id]);
+        return $this->db->affected_rows();
+    }
+
 }
