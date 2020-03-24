@@ -188,13 +188,13 @@ class Produk extends REST_Controller
             if($this->produk->fotoProduk($data,$id_produk) > 0){
                 $this->response([
                     'status' => true,
-                    'message' => 'foto sudah terupdate!'
+                    'message' => 'foto sudah ditambahkan!'
                 ], REST_Controller::HTTP_OK); 
             }else {
                 $this->response([
-                    'status' => false,  
-                    'message' => 'Gagal update fot produk!'
-                ], REST_Controller::HTTP_BAD_REQUEST); 
+                    'status' => true,
+                    'message' => 'foto sudah terupdate!'
+                ], REST_Controller::HTTP_OK); 
             }
         }else{
           $this->response([
@@ -207,18 +207,19 @@ class Produk extends REST_Controller
 
     private function image_upload($id)
 	{
+        $config['file_name']            = $id;
 		$config['upload_path']          = './upload/produk/';
-		$config['allowed_types']        = 'gif|jpg|png|JPG|PNG|jpeg';
-        $config['encrypt_name']			= TRUE;
+        $config['allowed_types']        = 'gif|jpg|png|JPG|PNG|jpeg';
+        $config['encrypt_name']			= FALSE;
         $config['overwrite']			= TRUE;
 
 		$this->load->library('upload', $config);
         
         $this->db->get_where('produk',['id_produk'=> $id]);
         //CEK JIKA SUDAH ADA FOTO , JIKA SUDAH ADA MAKA AKAN DI DELETE DULU 
-        $data = [
-            'foto' => $this->_deleteImage($id)
-        ];
+        // $data = [
+        //     'foto' => $this->_deleteImage($id)
+        // ];
         //KASIH FOTO BARU (UPDATE)
 		if ($this->upload->do_upload("foto")) {
             $data = array('upload_data' => $this->upload->data());
@@ -230,20 +231,20 @@ class Produk extends REST_Controller
 		print_r($this->upload->display_errors());
     }
 
-    private function _deleteImage($id)
-    {
-        $query = $this->db->get_where('produk',['id_produk'=> $id]);
+    // private function _deleteImage($id)
+    // {
+    //     $query = $this->db->get_where('produk',['id_produk'=> $id]);
 
-        foreach ($query->result() as $row)
-        {
-            $cek = $row->foto;
-        }
+    //     foreach ($query->result() as $row)
+    //     {
+    //         $cek = $row->foto;
+    //     }
 
-        if ($cek != "default.jpg") {
-            $filename = explode(".", $cek)[0];
-            return array_map('unlink', glob(FCPATH."upload/produk/$filename.*"));
-        }
-    }
+    //     if ($cek != "default.jpg") {
+    //         $filename = explode(".", $cek)[0];
+    //         return array_map('unlink', glob(FCPATH."upload/produk/$filename.*"));
+    //     }
+    // }
 
 }
 
