@@ -226,25 +226,27 @@ class Produk extends REST_Controller
 			return $data['upload_data']['file_name']; 
         }
         else{
-            return NULL;
+            return 'default.jpg';
         }
 		print_r($this->upload->display_errors());
     }
 
-    // private function _deleteImage($id)
-    // {
-    //     $query = $this->db->get_where('produk',['id_produk'=> $id]);
+    private function _deleteImage($id)
+    {
+        $query = $this->db->get_where('produk',['id_produk'=> $id]);
 
-    //     foreach ($query->result() as $row)
-    //     {
-    //         $cek = $row->foto;
-    //     }
+        foreach ($query->result() as $row)
+        {
+            $cek = $row->foto;
+        }
 
-    //     if ($cek != "default.jpg") {
-    //         $filename = explode(".", $cek)[0];
-    //         return array_map('unlink', glob(FCPATH."upload/produk/$filename.*"));
-    //     }
-    // }
+        if ($cek != "default.jpg") {
+            $filename = explode(".", $cek)[0];
+            return array_map('unlink', glob(FCPATH."upload/produk/$filename.*"));
+        }else{
+            return 'default.jpg';
+        }
+    }
 
 }
 
