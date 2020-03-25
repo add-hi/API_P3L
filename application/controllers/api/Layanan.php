@@ -36,6 +36,29 @@ class Layanan extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id = $this->get('id_layanan');
+
+        if($id === null)
+        {
+            $layanan = $this->layanan->getLog();
+        } else{
+            $layanan = $this->layanan->getLayanan($id);
+        }
+        
+        if($layanan){
+            $this->response([
+                'status' => TRUE,
+                'data' => $layanan
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
     public function delete_post(){
         $id = $this->post('id_layanan');
         $data = [

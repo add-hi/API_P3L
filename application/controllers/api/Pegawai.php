@@ -36,6 +36,63 @@ class Pegawai extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id = $this->get('id_pegawai');
+
+        if($id === null)
+        {
+            $pegawai = $this->pegawai->getLog();
+        } else{
+            $pegawai = $this->pegawai->getPegawai($id);
+        }
+        
+        if($pegawai){
+            $this->response([
+                'status' => TRUE,
+                'data' => $pegawai
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function delete_post(){
+        $id = $this->post('id_pegawai');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('pegawai',['id_pegawai'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->pegawai->deletePegawai($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'deleted'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'deleted'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+      }
+
     public function index_delete(){
         $id_pegawai = $this->delete('id_pegawai');
 
@@ -45,7 +102,7 @@ class Pegawai extends REST_Controller
                 'message' => 'id pegawai yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->pegawai->deletePegawai($id_pegawai) > 0){
+            if( $this->pegawai->hardDelete($id_pegawai) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,

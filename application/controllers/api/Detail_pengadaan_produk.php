@@ -36,6 +36,63 @@ class Detail_pengadaan_produk extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id = $this->get('id_detail_produk');
+
+        if($id === null)
+        {
+            $detail_pengadaan_produk = $this->detail_pengadaan_produk->getLog();
+        } else{
+            $detail_pengadaan_produk = $this->detail_pengadaan_produk->getDetail_pengadaan_produk($id);
+        }
+        
+        if($detail_pengadaan_produk){
+            $this->response([
+                'status' => TRUE,
+                'data' => $detail_pengadaan_produk
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function delete_post(){
+        $id = $this->post('id_detail_produk');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('detail_pengadaan_produk',['id_detail_produk'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->detail_pengadaan_produk->deleteDetail_pengadaan_produk($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'deleted'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'deleted'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+      }
+   
     public function index_delete(){
         $id_detail_produk = $this->delete('id_detail_produk');
 
@@ -45,7 +102,7 @@ class Detail_pengadaan_produk extends REST_Controller
                 'message' => 'id detail_pengadaan_produk yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->detail_pengadaan_produk->deleteDetail_pengadaan_produk($id_detail_produk) > 0){
+            if( $this->detail_pengadaan_produk->hardDelete($id_detail_produk) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,

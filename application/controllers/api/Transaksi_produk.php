@@ -36,6 +36,63 @@ class Transaksi_produk extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id = $this->get('id_transaksi_produk');
+
+        if($id === null)
+        {
+            $transaksi_produk = $this->transaksi_produk->getLog();
+        } else{
+            $transaksi_produk = $this->transaksi_produk->getTransaksi_produk($id);
+        }
+        
+        if($transaksi_produk){
+            $this->response([
+                'status' => TRUE,
+                'data' => $transaksi_produk
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function delete_post(){
+        $id = $this->post('id_transaksi_produk');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('transaksi_produk',['id_transaksi_produk'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->transaksi_produk->deleteTransaksi_produk($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'deleted'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'deleted'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+      }
+
     public function index_delete(){
         $id_transaksi_produk = $this->delete('id_transaksi_produk');
 
@@ -45,7 +102,7 @@ class Transaksi_produk extends REST_Controller
                 'message' => 'id transaksi_produk yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->transaksi_produk->deleteTransaksi_produk($id_transaksi_produk) > 0){
+            if( $this->transaksi_produk->hardDelete($id_transaksi_produk) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,

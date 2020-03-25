@@ -36,6 +36,64 @@ class Jenis_hewan extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id_jenis = $this->get('id_jenis');
+
+        if($id_jenis === null)
+        {
+            $jenis_hewan = $this->jenis_hewan->getLogJenis_hewan();
+        } else{
+            $jenis_hewan = $this->jenis_hewan->getJenis_hewan($id_jenis);
+        }
+        
+        if($jenis_hewan){
+            $this->response([
+                'status' => TRUE,
+                'data' => $jenis_hewan
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function delete_post(){
+        $id = $this->post('id_jenis');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('jenis_hewan',['id_jenis'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->jenis_hewan->deleteJenis_hewan($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'deleted'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'deleted'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+  
+      }
+
     public function index_delete(){
         $id_jenis = $this->delete('id_jenis');
 

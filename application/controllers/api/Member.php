@@ -36,6 +36,63 @@ class Member extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id = $this->get('id_member');
+
+        if($id === null)
+        {
+            $member = $this->member->getLog();
+        } else{
+            $member = $this->member->getMember($id);
+        }
+        
+        if($member){
+            $this->response([
+                'status' => TRUE,
+                'data' => $member
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function delete_post(){
+        $id = $this->post('id_member');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('member',['id_member'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->member->deleteMember($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'deleted'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'deleted'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+      }
+
     public function index_delete(){
         $id_member = $this->delete('id_member');
 
@@ -45,7 +102,7 @@ class Member extends REST_Controller
                 'message' => 'id member yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->member->deleteMember($id_member) > 0){
+            if( $this->member->hardDelete($id_member) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,

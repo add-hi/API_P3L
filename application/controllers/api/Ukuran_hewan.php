@@ -36,6 +36,63 @@ class Ukuran_hewan extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id = $this->get('id_ukuran');
+
+        if($id === null)
+        {
+            $ukuran_hewan = $this->ukuran_hewan->getLog();
+        } else{
+            $ukuran_hewan = $this->ukuran_hewan->getUkuran_hewan($id);
+        }
+        
+        if($ukuran_hewan){
+            $this->response([
+                'status' => TRUE,
+                'data' => $ukuran_hewan
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function delete_post(){
+        $id = $this->post('id_ukuran');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('ukuran_hewan',['id_ukuran'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->ukuran_hewan->deleteUkuran_hewan($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'deleted'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'deleted'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+      }
+
     public function index_delete(){
         $id_ukuran = $this->delete('id_ukuran');
 
@@ -45,7 +102,7 @@ class Ukuran_hewan extends REST_Controller
                 'message' => 'id ukuran hewan yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->ukuran_hewan->deleteUkuran_hewan($id_ukuran) > 0){
+            if( $this->ukuran_hewan->hardDelete($id_ukuran) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,

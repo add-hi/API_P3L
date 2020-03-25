@@ -2,16 +2,31 @@
 
 class Pengadaan_produk_model extends CI_Model{
 
-    public function getPengadaan_produk($id_pengadaan = null){
+    //untuk tampil semua data
+    public function getLog($id_pengadaan = null){
         if($id_pengadaan === null){
             return $this->db->get('pengadaan_produk')->result_array();
+        } else{
+            return $this->db->get_where('pengadaan_produk', ['id_pengadaan' => $id_pengadaan]) ->result_array();
+        }
+    }
+
+    //tidak menampilkan yang ter soft delete 
+    public function getPengadaan_produk($id_pengadaan = null){
+        if($id_pengadaan === null){
+            return $this->db->get_where('pengadaan_produk', ['delete_at' => null])->result_array();
         } else{
             return $this->db->get_where('pengadaan_produk', ['id_pengadaan' => $id_pengadaan]) ->result_array();
         }
         
     }
 
-    public function deletePengadaan_produk($id_pengadaan){
+    public function deletePengadaan_produk($data,$id_pengadaan){
+        $this->db->update('pengadaan_produk' , $data , ['id_pengadaan' => $id_pengadaan]);
+        return $this->db->affected_rows();
+    }
+
+    public function hardDelete($id_pengadaan){
         $this->db->delete('pengadaan_produk' , ['id_pengadaan' => $id_pengadaan]);
         return $this->db->affected_rows();
     }

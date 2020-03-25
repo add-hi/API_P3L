@@ -35,6 +35,28 @@ class Supplier extends REST_Controller
             ], REST_Controller::HTTP_NOT_FOUND); 
         }
     }
+    public function log_get(){
+        $id = $this->get('id_supplier');
+
+        if($id === null)
+        {
+            $supplier = $this->supplier->getLog();
+        } else{
+            $supplier = $this->supplier->getSupplier($id);
+        }
+        
+        if($supplier){
+            $this->response([
+                'status' => TRUE,
+                'data' => $supplier
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
 
     public function delete_post(){
         $id = $this->post('id_supplier');
@@ -59,16 +81,15 @@ class Supplier extends REST_Controller
             } else {
               $this->response([
                 'status' => false,
-                'message' => 'gagal soft delete'
+                'message' => 'deleted'
               ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }else{
           $this->response([
               'status' => false,
-              'message' => 'data sudah di soft delete sebelumnya'
+              'message' => 'deleted'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
-  
       }
 
     public function index_delete(){

@@ -36,6 +36,64 @@ class Data_hewan extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id = $this->get('id_hewan');
+
+        if($id === null)
+        {
+            $data_hewan = $this->data_hewan->getLog();
+        } else{
+            $data_hewan = $this->data_hewan->getData_hewan($id);
+        }
+        
+        if($data_hewan){
+            $this->response([
+                'status' => TRUE,
+                'data' => $data_hewan
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function delete_post(){
+        $id = $this->post('id_hewan');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('data_hewan',['id_hewan'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->data_hewan->deleteData_hewan($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'deleted'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'deleted'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+  
+      }
+      
     public function index_delete(){
         $id_hewan = $this->delete('id_hewan');
 
@@ -45,7 +103,7 @@ class Data_hewan extends REST_Controller
                 'message' => 'id data_hewan yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->data_hewan->deleteData_hewan($id_hewan) > 0){
+            if( $this->data_hewan->hardDelete($id_hewan) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,

@@ -36,6 +36,64 @@ class Detail_transaksi_layanan extends REST_Controller
         }
     }
 
+    public function log_get(){
+        $id = $this->get('id_detail_layanan');
+
+        if($id === null)
+        {
+            $detail_transaksi_layanan = $this->detail_transaksi_layanan->getLog();
+        } else{
+            $detail_transaksi_layanan = $this->detail_transaksi_layanan->getDetail_transaksi_layanan($id);
+        }
+        
+        if($detail_transaksi_layanan){
+            $this->response([
+                'status' => TRUE,
+                'data' => $detail_transaksi_layanan
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function delete_post(){
+        $id = $this->post('id_detail_layanan');
+        $data = [
+          'delete_at' => date('Y-m-d H:i:s')
+        ];
+  
+        $query = $this->db->get_where('detail_transaksi_layanan',['id_detail_layanan'=> $id]);
+  
+      foreach ($query->result() as $row)
+      {
+          $cek = $row->delete_at;
+      }
+  
+        if($cek === null){
+          if($this->detail_transaksi_layanan->deleteDetail_transaksi_layanan($data, $id) > 0) {
+              $this->response([
+                'status' => true,
+                'id' => $id,
+                'message' => 'berhasil soft delete :)'
+              ],  REST_Controller::HTTP_OK);
+            } else {
+              $this->response([
+                'status' => false,
+                'message' => 'deleted'
+              ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }else{
+          $this->response([
+              'status' => false,
+              'message' => 'deleted'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+      }
+
+
     public function index_delete(){
         $id_detail_layanan = $this->delete('id_detail_layanan');
 
@@ -45,7 +103,7 @@ class Detail_transaksi_layanan extends REST_Controller
                 'message' => 'id detail_transaksi_layanan yang ingin dihapus tidak ditemukan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         } else{
-            if( $this->detail_transaksi_layanan->deleteDetail_transaksi_layanan($id_detail_layanan) > 0){
+            if( $this->detail_transaksi_layanan->hardDelete($id_detail_layanan) > 0){
                 //OKE
                 $this->response([
                     'status' => FALSE,

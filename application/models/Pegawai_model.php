@@ -2,17 +2,33 @@
 
 class Pegawai_model extends CI_Model{
 
+    //untuk tampil semua data
+    public function getLog($id = null){
+        if($id === null){
+            return $this->db->get('pegawai')->result_array();
+        } else{
+            return $this->db->get_where('pegawai', ['id_pegawai' => $id]) ->result_array();
+        }
+        
+    }
 
+    //tidak menampilkan yang ter soft delete   
     public function getPegawai($id_pegawai = null){
         if($id_pegawai === null){
-            return $this->db->get('pegawai')->result_array();
+            return $this->db->get_where('pegawai', ['delete_at' => null])->result_array();
         } else{
             return $this->db->get_where('pegawai', ['id_pegawai' => $id_pegawai]) ->result_array();
         }
         
     }
 
-    public function deletePegawai($id_pegawai){
+    public function deletePegawai($data,$id_pegawai){
+        $this->db->update('pegawai' , $data , ['id_pegawai' => $id_pegawai]);
+        return $this->db->affected_rows();
+    }
+
+
+    public function hardDelete($id_pegawai){
         $this->db->delete('pegawai' , ['id_pegawai' => $id_pegawai]);
         return $this->db->affected_rows();
     }
