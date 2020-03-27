@@ -188,12 +188,12 @@ class Produk extends REST_Controller
             if($this->produk->fotoProduk($data,$id_produk) > 0){
                 $this->response([
                     'status' => true,
-                    'message' => 'foto sudah ditambahkan!'
+                    'message' => 'foto sudah terupdate!'
                 ], REST_Controller::HTTP_OK); 
             }else {
                 $this->response([
                     'status' => true,
-                    'message' => 'foto sudah terupdate!'
+                    'message' => 'foto sudah ditambahkan!'
                 ], REST_Controller::HTTP_OK); 
             }
         }else{
@@ -216,10 +216,10 @@ class Produk extends REST_Controller
 		$this->load->library('upload', $config);
         
         $this->db->get_where('produk',['id_produk'=> $id]);
-        //CEK JIKA SUDAH ADA FOTO , JIKA SUDAH ADA MAKA AKAN DI DELETE DULU 
-        // $data = [
-        //     'foto' => $this->_deleteImage($id)
-        // ];
+        //hapus foto default 
+        $data = [
+            'foto' => $this->_deleteImage($id)
+        ];
         //KASIH FOTO BARU (UPDATE)
 		if ($this->upload->do_upload("foto")) {
             $data = array('upload_data' => $this->upload->data());
@@ -239,15 +239,11 @@ class Produk extends REST_Controller
         {
             $cek = $row->foto;
         }
-
-        if ($cek != "default.jpg") {
+        if($cek != "default.jpg"){
             $filename = explode(".", $cek)[0];
             return array_map('unlink', glob(FCPATH."upload/produk/$filename.*"));
-        }else{
-            return 'default.jpg';
         }
     }
-
 }
 
 // SAYA UCAPKAN TRIMA KASIH PADA TUHAN YANG MAHA ESA
