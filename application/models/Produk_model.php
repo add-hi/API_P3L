@@ -1,6 +1,22 @@
 <?php
 
 class Produk_model extends CI_Model{
+    
+    //ascending harga
+    public function getHarga(){
+        $this->db->order_by('harga', 'ASC');
+        $query = $this->db->get_where('produk', ['delete_at' => null]);
+        return $query->result_array();
+        // return $this->db->query("SELECT * from produk ORDER BY 'stok' ASC")->result_array();
+    }
+
+     //ascending harga
+     public function getStok(){
+        $this->db->order_by('stok', 'DESC');
+        $query = $this->db->get_where('produk', ['delete_at' => null]);
+        return $query->result_array();
+        // return $this->db->query("SELECT * from produk ORDER BY 'stok' ASC")->result_array();
+    }
 
     //untuk tampil semua data
     public function getLogProduk($id_produk = null){

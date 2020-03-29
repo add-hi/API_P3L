@@ -14,6 +14,36 @@ class Produk extends REST_Controller
         
     }
 
+    public function harga_get(){
+        $produk = $this->produk->getHarga();
+        if($produk){
+            $this->response([
+                'status' => TRUE,
+                'data' => $produk
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    public function stok_get(){
+        $produk = $this->produk->getStok();
+        if($produk){
+            $this->response([
+                'status' => TRUE,
+                'data' => $produk
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
     public function index_get(){
         $id_produk = $this->get('id_produk');
 
