@@ -15,9 +15,9 @@ class Supplier_model extends CI_Model{
     //tidak menampilkan yang ter soft delete    
     public function getSupplier($id_supplier = null){
         if($id_supplier === null){
-            return $this->db->get_where('supplier', ['delete_at' => null])->result_array();
+            return $this->db->get_where('supplier', ['delete_at' => null])->result();
         } else{
-            return $this->db->get_where('supplier', ['id_supplier' => $id_supplier]) ->result_array();
+            return $this->db->get_where('supplier', ['id_supplier' => $id_supplier]) ->result();
         }
         
     }

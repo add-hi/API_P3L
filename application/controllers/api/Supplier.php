@@ -9,6 +9,9 @@ require APPPATH . 'libraries/REST_Controller.php';
 class Supplier extends REST_Controller
 {
     public function __construct(){
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Methods: GET, OPTIONS, POST, DELETE");
+        header("Access-Control-Allow-Headers: Content-Type, ContentLength, Accept-Encoding");
         parent::__construct();
         $this->load->model('Supplier_model' , 'supplier');
     }
