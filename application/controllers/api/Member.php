@@ -62,7 +62,8 @@ class Member extends REST_Controller
     public function delete_post(){
         $id = $this->post('id_member');
         $data = [
-          'delete_at' => date('Y-m-d H:i:s')
+          'delete_at' => date('Y-m-d H:i:s'),
+          'deleted_by' => $this->post('deleted_by')
         ];
   
         $query = $this->db->get_where('member',['id_member'=> $id]);
@@ -126,7 +127,8 @@ class Member extends REST_Controller
             'no_telp' => $this->post('no_telp'),
             'tgl_lhr' => $this->post('tgl_lhr'),
             'alamat' => $this->post('alamat'),
-            'status' => $this->post('status')
+            'status' => $this->post('status'),
+            'created_by' => $this->post('created_by')
         ];
 
         if($this->member->createMember($data) > 0){

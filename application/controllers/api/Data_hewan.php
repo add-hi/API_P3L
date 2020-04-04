@@ -62,7 +62,8 @@ class Data_hewan extends REST_Controller
     public function delete_post(){
         $id = $this->post('id_hewan');
         $data = [
-          'delete_at' => date('Y-m-d H:i:s')
+          'delete_at' => date('Y-m-d H:i:s'),
+          'deleted_by' => $this->post('deleted_by')
         ];
   
         $query = $this->db->get_where('data_hewan',['id_hewan'=> $id]);
@@ -127,7 +128,8 @@ class Data_hewan extends REST_Controller
             'nama' => $this->post('nama'),
             'tgl_lhr' => $this->post('tgl_lhr'),
             'id_pegawai_cs' => $this->post('id_pegawai_cs'),
-            'id_pegawai_kasir' => $this->post('id_pegawai_kasir')
+            'id_pegawai_kasir' => $this->post('id_pegawai_kasir'),
+            'created_by' => $this->post('created_by')
         ];
 
         if($this->data_hewan->createData_hewan($data) > 0){
