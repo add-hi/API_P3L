@@ -13,11 +13,11 @@ class Detail_pengadaan_produk_model extends CI_Model{
     }
 
     //tidak menampilkan yang ter soft delete    
-    public function getDetail_pengadaan_produk($id_detail_produk = null){
-        if($id_detail_produk === null){
-            return $this->db->get_where('detail_pengadaan_produk', ['delete_at' => null])->result_array();
+    public function getDetail_pengadaan_produk($id_pengadaan = null){
+        if($id_pengadaan === null){
+            return $this->db->query("SELECT DP.id_detail_produk, DP.id_pengadaan, DP.id_produk, M.nama , M.harga ,DP.jumlah, DP.delete_at, DP.sub_harga FROM detail_pengadaan_produk DP JOIN produk M ON (DP.id_produk=M.id_produk)")->result_array();
         } else{
-            return $this->db->get_where('detail_pengadaan_produk', ['id_detail_produk' => $id_detail_produk]) ->result_array();
+            return $this->db->query("SELECT DP.id_detail_produk, DP.id_pengadaan, DP.id_produk, M.nama , M.harga ,DP.jumlah, DP.delete_at ,DP.sub_harga  FROM detail_pengadaan_produk DP JOIN produk M ON (DP.id_produk=M.id_produk) WHERE DP.id_pengadaan = '$id_pengadaan'") ->result_array();
         }
         
     }

@@ -14,13 +14,13 @@ class Detail_pengadaan_produk extends REST_Controller
     }
 
     public function index_get(){
-        $id_detail_produk = $this->get('id_detail_produk');
+        $id_pengadaan = $this->get('id_pengadaan');
 
-        if($id_detail_produk === null)
+        if($id_pengadaan === null)
         {
             $detail_pengadaan_produk = $this->detail_pengadaan_produk->getDetail_pengadaan_produk();
         } else{
-            $detail_pengadaan_produk = $this->detail_pengadaan_produk->getDetail_pengadaan_produk($id_detail_produk);
+            $detail_pengadaan_produk = $this->detail_pengadaan_produk->getDetail_pengadaan_produk($id_pengadaan);
         }
         
         if($detail_pengadaan_produk){
@@ -122,7 +122,8 @@ class Detail_pengadaan_produk extends REST_Controller
         $data = [
             'id_pengadaan' => $this->post('id_pengadaan'),
             'id_produk' => $this->post('id_produk'),
-            'jumlah' => $this->post('jumlah')
+            'jumlah' => $this->post('jumlah'),
+            'sub_harga' => $this->post('sub_harga')
         ];
 
         if($this->detail_pengadaan_produk->createDetail_pengadaan_produk($data) > 0){
@@ -145,7 +146,8 @@ class Detail_pengadaan_produk extends REST_Controller
         $data = [
             'id_pengadaan' => $this->put('id_pengadaan'),
             'id_produk' => $this->put('id_produk'),
-            'jumlah' => $this->put('jumlah')
+            'jumlah' => $this->put('jumlah'),
+            'sub_harga' => $this->put('sub_harga')
         ];
 
         if($this->detail_pengadaan_produk->updateDetail_pengadaan_produk($data,$id_detail_produk) > 0){

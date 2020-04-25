@@ -2,18 +2,18 @@
 
 class Detail_transaksi_produk_model extends CI_Model{
 
-    //untuk tampil semua data
-    public function getLog($id_detail_produk = null){
-        if($id_detail_produk === null){
-            return $this->db->get('detail_transaksi_produk')->result_array();
+    //tidak menampilkan yang ter soft delete 
+    public function getDetail_transaksi_produk($id_transaksi_produk = null){
+        if($id_transaksi_produk === null){
+            return $this->db->query("SELECT DT.id_detail_produk, DT.id_transaksi_produk, DT.id_produk, DT.jumlah, DT.delete_at, DT.sub_harga , P.nama AS nama_produk , P.foto AS foto FROM detail_transaksi_produk DT JOIN produk P ON (DT.id_produk=P.id_produk)")->result_array();
         } else{
-            return $this->db->get_where('detail_transaksi_produk', ['id_detail_produk' => $id_detail_produk]) ->result_array();
+            return $this->db->query("SELECT DT.id_detail_produk, DT.id_transaksi_produk, DT.id_produk, DT.jumlah, DT.delete_at, DT.sub_harga , P.nama AS nama_produk , P.foto AS foto FROM detail_transaksi_produk DT JOIN produk P ON (DT.id_produk=P.id_produk) WHERE DT.id_transaksi_produk = '$id_transaksi_produk'") ->result_array();
         }
         
     }
 
-    //tidak menampilkan yang ter soft delete    
-    public function getDetail_transaksi_produk($id_detail_produk = null){
+    //untuk tampil semua data
+    public function getLog($id_detail_produk = null){
         if($id_detail_produk === null){
             return $this->db->get_where('detail_transaksi_produk', ['delete_at' => null])->result_array();
         } else{

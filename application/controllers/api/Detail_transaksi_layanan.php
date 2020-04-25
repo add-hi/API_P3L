@@ -14,13 +14,13 @@ class Detail_transaksi_layanan extends REST_Controller
     }
 
     public function index_get(){
-        $id_detail_layanan = $this->get('id_detail_layanan');
+        $id_transaksi_layanan = $this->get('id_transaksi_layanan');
 
-        if($id_detail_layanan === null)
+        if($id_transaksi_layanan === null)
         {
             $detail_transaksi_layanan = $this->detail_transaksi_layanan->getDetail_transaksi_layanan();
         } else{
-            $detail_transaksi_layanan = $this->detail_transaksi_layanan->getDetail_transaksi_layanan($id_detail_layanan);
+            $detail_transaksi_layanan = $this->detail_transaksi_layanan->getDetail_transaksi_layanan($id_transaksi_layanan);
         }
         
         if($detail_transaksi_layanan){

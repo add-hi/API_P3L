@@ -36,6 +36,26 @@ class Transaksi_produk extends REST_Controller
         }
     }
 
+        //id Format
+
+        public function id_format(){
+            $temp = "PR-".date("d").date("m").date("y")."-";
+            $this->db->select('id_transaksi_produk');
+            $this->db->from('transaksi_produk');
+            $this->db->like('id_transaksi_produk',$temp);
+    
+            $id_format = $this->db->get()->result();
+            if($id_format == null){
+                return $temp."0"."1";
+            }else if (count($id_format)>=9){
+                $i = count($id_format)+1;
+                return $temp.$i;
+            }else{
+                $i = count($id_format)+1;
+                return $temp."0".$i;
+            }
+        }
+
     public function log_get(){
         $id = $this->get('id_transaksi_produk');
 
@@ -120,6 +140,7 @@ class Transaksi_produk extends REST_Controller
 
     public function index_post(){
         $data = [
+            'id_transaksi_produk' => $this->id_format(),
             'id_member' => $this->post('id_member'),
             'total_harga' => $this->post('total_harga'),
             'diskon' => $this->post('diskon'),

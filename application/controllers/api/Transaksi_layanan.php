@@ -13,6 +13,26 @@ class Transaksi_layanan extends REST_Controller
         $this->load->model('Transaksi_layanan_model' , 'transaksi_layanan');
     }
 
+    //id Format
+
+    public function id_format(){
+        $temp = "LY-".date("d").date("m").date("y")."-";
+        $this->db->select('id_transaksi_layanan');
+        $this->db->from('transaksi_layanan');
+        $this->db->like('id_transaksi_layanan',$temp);
+
+        $id_format = $this->db->get()->result();
+        if($id_format == null){
+            return $temp."0"."1";
+        }else if (count($id_format)>=9){
+            $i = count($id_format)+1;
+            return $temp.$i;
+        }else{
+            $i = count($id_format)+1;
+            return $temp."0".$i;
+        }
+    }
+
     public function index_get(){
         $id_transaksi_layanan = $this->get('id_transaksi_layanan');
 
@@ -120,6 +140,7 @@ class Transaksi_layanan extends REST_Controller
 
     public function index_post(){
         $data = [
+            'id_transaksi_layanan' => $this->id_format(),
             'id_member' => $this->post('id_member'),
             'id_hewan' => $this->post('id_hewan'),
             'diskon' => $this->post('diskon'),

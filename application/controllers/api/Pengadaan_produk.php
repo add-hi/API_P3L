@@ -13,6 +13,45 @@ class Pengadaan_produk extends REST_Controller
         $this->load->model('Pengadaan_produk_model' , 'pengadaan_produk');
     }
 
+    
+    //id Format
+
+    public function id_get(){
+        $temp = "PO-".date("Y")."-".date("m")."-".date("d")."-";
+        $this->db->select('id_pengadaan');
+        $this->db->from('pengadaan_produk');
+        $this->db->like('id_pengadaan',$temp);
+
+        $id_format = $this->db->get()->result();
+        if($id_format == null){
+            return $temp."0"."1";
+        }else if (count($id_format)>=9){
+            $i = count($id_format)+1;
+            return $temp.$i;
+        }else{
+            $i = count($id_format)+1;
+            return $temp."0".$i;
+        }
+    }
+
+    public function updateProduk_post(){
+        $id_produk = $this->post('id_produk');
+        $tambah_stok = $this->post('tambah_stok');
+
+        $response = $this->pengadaan_produk->update_stok($id_produk,$tambah_stok);
+        if($response > 0){
+            $this->response([
+                'status' => TRUE,
+                'message' => 'Berhasil'
+            ], REST_Controller::HTTP_OK); 
+        }else{
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
     public function index_get(){
         $id_pengadaan = $this->get('id_pengadaan');
 
@@ -121,6 +160,7 @@ class Pengadaan_produk extends REST_Controller
 
     public function index_post(){
         $data = [
+            'id_pengadaan' => $this->id_get(),
             'status' => $this->post('status'),
             'id_supplier' => $this->post('id_supplier'),
             'printed_at' => $this->post('printed_at'),
@@ -140,6 +180,21 @@ class Pengadaan_produk extends REST_Controller
         }
     }
 
+    public function konfirmasi_put(){
+        $id_pengadaan = $this->put('id_pengadaan');
+        $data = $this->put('status');
+        if($this->pengadaan_produk->konfirmasi_barang($data,$id_pengadaan) > 0){
+            $this->response([
+                'status' => true,
+                'message' => 'pengadaan_produk sudah terkonfirmasi!'
+            ], REST_Controller::HTTP_OK); 
+        }else {
+            $this->response([
+                'status' => false,  
+                'message' => 'Gagal konfirmasi pengadaan_produk!'
+            ], REST_Controller::HTTP_BAD_REQUEST); 
+        }
+    }
     public function index_put(){
 
         $id_pengadaan = $this->put('id_pengadaan');
