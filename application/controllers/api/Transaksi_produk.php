@@ -125,7 +125,8 @@ class Transaksi_produk extends REST_Controller
             'diskon' => $this->post('diskon'),
             'sub_total' => $this->post('sub_total'),
             'id_pegawai_cs' => $this->post('id_pegawai_cs'),
-            'id_pegawai_kasir' => $this->post('id_pegawai_kasir')
+            'id_pegawai_kasir' => $this->post('id_pegawai_kasir'),
+            'id_hewan' => $this->post('id_hewan')
         ];
 
         if($this->transaksi_produk->createTransaksi_produk($data) > 0){
