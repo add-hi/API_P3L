@@ -195,6 +195,7 @@ class Pengadaan_produk extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST); 
         }
     }
+    
     public function index_put(){
 
         $id_pengadaan = $this->put('id_pengadaan');

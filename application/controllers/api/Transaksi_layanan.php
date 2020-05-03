@@ -111,7 +111,7 @@ class Transaksi_layanan extends REST_Controller
               'message' => 'deleted'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
-      }
+    }
 
     public function index_delete(){
         $id_transaksi_layanan = $this->delete('id_transaksi_layanan');
@@ -163,6 +163,21 @@ class Transaksi_layanan extends REST_Controller
             $this->response([
                 'status' => false,  
                 'message' => 'Gagal menambahkan transaksi_layanan!'
+            ], REST_Controller::HTTP_BAD_REQUEST); 
+        }
+    }
+
+    public function ubahStatus_put(){
+        $id_transaksi_layanan = $this->put('id_transaksi_layanan');
+        if($this->transaksi_layanan->ubahStatus($id_transaksi_layanan) > 0){
+            $this->response([
+                'status' => true,
+                'message' => 'ubah status transaksi_layanan berhasil!'
+            ], REST_Controller::HTTP_OK); 
+        }else {
+            $this->response([
+                'status' => false,  
+                'message' => 'Gagal ubah status transaksi_layanan!'
             ], REST_Controller::HTTP_BAD_REQUEST); 
         }
     }

@@ -41,4 +41,9 @@ class Transaksi_layanan_model extends CI_Model{
         $this->db->update('transaksi_layanan' , $data , ['id_transaksi_layanan' => $id_transaksi_layanan]);
         return $this->db->affected_rows();
     }
+
+    public function ubahStatus($id_transaksi_layanan){
+        $this->db->query("UPDATE transaksi_layanan SET status_layanan = 'selesai' WHERE id_transaksi_layanan = '$id_transaksi_layanan'");
+        return $this->db->affected_rows();
+    }
 }
