@@ -15,9 +15,9 @@ class Transaksi_layanan_model extends CI_Model{
     //tidak menampilkan yang ter soft delete 
     public function getTransaksi_layanan($id_transaksi_layanan = null){
         if($id_transaksi_layanan === null){
-            return $this->db->query("SELECT TL.id_transaksi_layanan, TL.id_member, TL.id_hewan,TL.diskon, TL.total_harga, TL.sub_total, TL.status_layanan, TL.status_pembayaran, TL.created_at, TL.tgl_selesai, TL.delete_at, TL.id_pegawai_cs, TL.id_pegawai_kasir , DH.nama AS nama_hewan ,  M.nama AS nama_member FROM transaksi_layanan TL JOIN data_hewan DH ON (TL.id_hewan=DH.id_hewan) JOIN member M ON (TL.id_member = M.id_member) WHERE TL.delete_at IS NULL")->result_array();
+            return $this->db->query("SELECT TL.id_transaksi_layanan, TL.id_member, TL.id_hewan,TL.diskon, TL.total_harga, TL.sub_total, TL.status_layanan, TL.status_pembayaran, TL.created_at, TL.tgl_selesai, TL.delete_at, TL.id_pegawai_cs, TL.id_pegawai_kasir , DH.nama AS nama_hewan ,  M.nama AS nama_member FROM transaksi_layanan TL JOIN data_hewan DH ON (TL.id_hewan=DH.id_hewan) JOIN member M ON (TL.id_member = M.id_member) WHERE TL.delete_at IS NULL ORDER BY TL.id_transaksi_layanan DESC")->result_array();
         } else{
-            return $this->db->query("SELECT TL.id_transaksi_layanan, TL.id_member, TL.id_hewan,TL.diskon, TL.total_harga, TL.sub_total, TL.status_layanan, TL.status_pembayaran, TL.created_at, TL.tgl_selesai, TL.delete_at, TL.id_pegawai_cs, TL.id_pegawai_kasir , DH.nama AS nama_hewan ,  M.nama AS nama_member FROM transaksi_layanan TL JOIN data_hewan DH ON (TL.id_hewan=DH.id_hewan) JOIN member M ON (TL.id_member = M.id_member) WHERE TL.delete_at IS NULL AND id_transaski_layanan = '$id_transaksi_layanan' ") ->result_array();
+            return $this->db->query("SELECT TL.id_transaksi_layanan, TL.id_member, TL.id_hewan,TL.diskon, TL.total_harga, TL.sub_total, TL.status_layanan, TL.status_pembayaran, TL.created_at, TL.tgl_selesai, TL.delete_at, TL.id_pegawai_cs, TL.id_pegawai_kasir , DH.nama AS nama_hewan ,  M.nama AS nama_member FROM transaksi_layanan TL JOIN data_hewan DH ON (TL.id_hewan=DH.id_hewan) JOIN member M ON (TL.id_member = M.id_member) WHERE TL.delete_at IS NULL AND id_transaski_layanan = '$id_transaksi_layanan' ORDER BY TL.id_transaksi_layanan DESC") ->result_array();
         }
         
     }

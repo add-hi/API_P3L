@@ -15,9 +15,9 @@ class Transaksi_produk_model extends CI_Model{
     //tidak menampilkan yang ter soft delete  
     public function getTransaksi_produk($id_transaksi_produk = null){
         if($id_transaksi_produk === null){
-            return $this->db->query("SELECT TP.id_transaksi_produk, TP.id_member, TP.total_harga, TP.diskon, TP.sub_total, TP.created_at, TP.update_at, TP.delete_at, TP.id_pegawai_cs, TP.id_pegawai_kasir, TP.id_hewan , M.nama AS nama_member , DH.nama AS nama_hewan  FROM transaksi_produk TP JOIN member M ON (TP.id_member = M.id_member) JOIN data_hewan DH ON (TP.id_hewan = DH.id_hewan) WHERE TP.delete_at IS NULL ")->result_array();
+            return $this->db->query("SELECT TP.id_transaksi_produk, TP.id_member, TP.total_harga, TP.diskon, TP.sub_total, TP.created_at, TP.update_at, TP.delete_at, TP.id_pegawai_cs, TP.id_pegawai_kasir, TP.id_hewan , M.nama AS nama_member , DH.nama AS nama_hewan  FROM transaksi_produk TP JOIN member M ON (TP.id_member = M.id_member) JOIN data_hewan DH ON (TP.id_hewan = DH.id_hewan) WHERE TP.delete_at IS NULL ORDER BY TP.id_transaksi_produk DESC")->result_array();
         } else{
-            return $this->db->query("SELECT TP.id_transaksi_produk, TP.id_member, TP.total_harga, TP.diskon, TP.sub_total, TP.created_at, TP.update_at, TP.delete_at, TP.id_pegawai_cs, TP.id_pegawai_kasir, TP.id_hewan , M.nama AS nama_member , DH.nama AS nama_hewan  FROM transaksi_produk TP JOIN member M ON (TP.id_member = M.id_member) JOIN data_hewan DH ON (TP.id_hewan = DH.id_hewan) WHERE TP.id_transaksi_produk = '$id_transaksi_produk' AND TP.delete_at IS NULL")->result_array();
+            return $this->db->query("SELECT TP.id_transaksi_produk, TP.id_member, TP.total_harga, TP.diskon, TP.sub_total, TP.created_at, TP.update_at, TP.delete_at, TP.id_pegawai_cs, TP.id_pegawai_kasir, TP.id_hewan , M.nama AS nama_member , DH.nama AS nama_hewan  FROM transaksi_produk TP JOIN member M ON (TP.id_member = M.id_member) JOIN data_hewan DH ON (TP.id_hewan = DH.id_hewan) WHERE TP.id_transaksi_produk = '$id_transaksi_produk' AND TP.delete_at IS NULL ORDER BY TP.id_transaksi_produk DESC")->result_array();
         }
         
     }
