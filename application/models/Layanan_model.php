@@ -22,6 +22,22 @@ class Layanan_model extends CI_Model{
         
     }
 
+    //ascending harga
+    public function getHargaAsc(){
+        $this->db->order_by('harga', 'ASC');
+        $query = $this->db->get_where('layanan', ['delete_at' => null]);
+        return $query->result_array();
+        // return $this->db->query("SELECT * from produk ORDER BY 'stok' ASC")->result_array();
+    }
+
+    //ascending harga
+    public function getHargaDesc(){
+        $this->db->order_by('harga', 'DESC');
+        $query = $this->db->get_where('layanan', ['delete_at' => null]);
+        return $query->result_array();
+        // return $this->db->query("SELECT * from produk ORDER BY 'stok' ASC")->result_array();
+    }
+
     public function deleteLayanan($data,$id_layanan){
         $this->db->update('layanan' , $data , ['id_layanan' => $id_layanan]);
         return $this->db->affected_rows();

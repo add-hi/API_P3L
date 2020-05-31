@@ -13,6 +13,38 @@ class Layanan extends REST_Controller
         $this->load->model('Layanan_model' , 'layanan');
     }
 
+    //harga asc
+    public function hargaAsc_get(){
+        $layanan = $this->layanan->getHargaAsc();
+        if($layanan){
+            $this->response([
+                'status' => TRUE,
+                'data' => $layanan
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
+    //harga desc
+    public function hargaDesc_get(){
+        $layanan = $this->layanan->getHargaDesc();
+        if($layanan){
+            $this->response([
+                'status' => TRUE,
+                'data' => $layanan
+            ], REST_Controller::HTTP_OK); 
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id tidak ditemukan!'
+            ], REST_Controller::HTTP_NOT_FOUND); 
+        }
+    }
+
     public function index_get(){
         $id_layanan = $this->get('id_layanan');
 

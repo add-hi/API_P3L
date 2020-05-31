@@ -10,7 +10,7 @@ class Produk_model extends CI_Model{
         // return $this->db->query("SELECT * from produk ORDER BY 'stok' ASC")->result_array();
     }
 
-     //ascending harga
+     //ascending stock
      public function getStok(){
         $this->db->order_by('stok', 'DESC');
         $query = $this->db->get_where('produk', ['delete_at' => null]);
